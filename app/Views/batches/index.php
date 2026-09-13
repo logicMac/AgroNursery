@@ -127,7 +127,7 @@
                     </td>
                     <td class="px-6 py-4">
                         <div id="risk-<?= $b['id'] ?>" class="min-w-[100px]">
-                            <button type="button" onclick="predictRisk(<?= $b['id'] ?>)" class="inline-flex items-center gap-1 text-rose-600 hover:text-rose-700 hover:bg-rose-50 px-2.5 py-1 rounded-lg text-xs font-medium transition duration-150">
+                            <button type="button" onclick="predictRisk(<?= $b['id'] ?>)" class="inline-flex items-center gap-1 text-mint-700 hover:text-mint-600 hover:bg-mint-50 px-2.5 py-1 rounded-lg text-xs font-medium transition duration-150">
                                 <i data-lucide="sparkles" class="w-3 h-3"></i> Predict
                             </button>
                         </div>
@@ -166,7 +166,9 @@ require __DIR__ . '/../components/modal.php';
     <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden">
         <div class="px-5 py-4 border-b border-slate-200 bg-slate-50 flex items-center justify-between">
             <div class="flex items-center gap-2">
-                <i data-lucide="sparkles" class="w-5 h-5 text-rose-600"></i>
+                <div class="h-9 w-9 rounded-lg bg-mint-100 flex items-center justify-center text-mint-700">
+                    <i data-lucide="sparkles" class="w-5 h-5"></i>
+                </div>
                 <div>
                     <h3 class="font-semibold text-slate-800">AI Shrinkage Risk Prediction</h3>
                     <p class="text-xs text-slate-500" id="riskModalBatch">Batch analysis</p>
@@ -198,7 +200,7 @@ function predictRisk(batchId) {
     modal.classList.remove('hidden');
     modal.classList.add('flex');
 
-    const csrf = document.querySelector('input[name="csrf_token"]')?.value || document.querySelector('meta[name="csrf"]')?.content;
+    const csrf = document.querySelector('meta[name="csrf-token"]')?.content || document.querySelector('input[name="csrf_token"]')?.value;
 
     fetch('<?= url("ai/shrinkage/") ?>' + batchId, {
         method: 'POST',
@@ -208,35 +210,33 @@ function predictRisk(batchId) {
     .then(r => r.json())
     .then(data => {
         if (data.error) {
-            body.innerHTML = '<div class="p-4 rounded-xl bg-red-50 border border-red-200 text-sm text-red-700 flex items-center gap-2"><i data-lucide="alert-circle" class="w-4 h-4"></i> ' + data.error + '</div>';
+            body.innerHTML = '<div class="p-4 rounded-xl bg-slate-50 border border-slate-200 text-sm text-slate-600 flex items-center gap-2"><i data-lucide="alert-circle" class="w-4 h-4"></i> ' + data.error + '</div>';
         } else {
             const p = data.prediction;
-            const riskColors = { low: 'green', medium: 'amber', high: 'red' };
-            const color = riskColors[p.risk_level] || 'slate';
             const score = p.risk_score || 0;
 
             // Update inline badge
             const inline = document.getElementById('risk-' + batchId);
             if (inline) {
-                inline.innerHTML = '<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-' + color + '-100 text-' + color + '-700"><i data-lucide="activity" class="w-3 h-3"></i> ' + (p.risk_level || 'N/A').charAt(0).toUpperCase() + (p.risk_level || '').slice(1) + ' (' + score + ')</span>';
+                inline.innerHTML = '<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-mint-100 text-mint-700"><i data-lucide="activity" class="w-3 h-3"></i> ' + (p.risk_level || 'N/A').charAt(0).toUpperCase() + (p.risk_level || '').slice(1) + ' (' + score + ')</span>';
             }
 
             body.innerHTML = `
                 <div class="space-y-4">
-                    <div class="flex items-center justify-between p-4 rounded-xl bg-${color}-50 border border-${color}-200">
+                    <div class="flex items-center justify-between p-4 rounded-xl bg-mint-50 border border-mint-200">
                         <div>
                             <p class="text-xs text-slate-500 font-medium">Risk Level</p>
-                            <p class="text-2xl font-bold text-${color}-700 capitalize">${p.risk_level || 'N/A'}</p>
+                            <p class="text-2xl font-bold text-mint-700 capitalize">${p.risk_level || 'N/A'}</p>
                         </div>
                         <div class="text-right">
                             <p class="text-xs text-slate-500 font-medium">Risk Score</p>
-                            <p class="text-2xl font-bold text-${color}-700">${score}/100</p>
+                            <p class="text-2xl font-bold text-mint-700">${score}/100</p>
                         </div>
                     </div>
                     <div>
                         <p class="text-xs text-slate-500 font-medium mb-1.5">Confidence: ${p.confidence || 0}%</p>
                         <div class="w-full bg-slate-100 rounded-full h-2">
-                            <div class="bg-${color}-500 rounded-full h-2" style="width: ${p.confidence || 0}%"></div>
+                            <div class="bg-mint-500 rounded-full h-2" style="width: ${p.confidence || 0}%"></div>
                         </div>
                     </div>
                     ${p.primary_factors ? `
@@ -257,7 +257,7 @@ function predictRisk(batchId) {
         lucide.createIcons();
     })
     .catch(() => {
-        body.innerHTML = '<div class="p-4 rounded-xl bg-red-50 border border-red-200 text-sm text-red-700">Request failed. Check your network.</div>';
+        body.innerHTML = '<div class="p-4 rounded-xl bg-slate-50 border border-slate-200 text-sm text-slate-600">Request failed. Check your network.</div>';
         lucide.createIcons();
     });
 }

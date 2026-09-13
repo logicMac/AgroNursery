@@ -24,10 +24,10 @@
 </div>
 
 <!-- AI Quality Prediction Card -->
-<div class="bg-gradient-to-r from-amber-50 to-white rounded-2xl border border-amber-200 shadow-md hover:shadow-lg transition duration-200 p-5 mb-6">
+<div class="bg-white rounded-2xl border border-slate-200 shadow-md hover:shadow-lg transition duration-200 p-5 mb-6">
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div class="flex items-center gap-3">
-            <div class="h-10 w-10 rounded-xl bg-amber-100 flex items-center justify-center text-amber-600">
+            <div class="h-10 w-10 rounded-xl bg-mint-100 flex items-center justify-center text-mint-700">
                 <i data-lucide="sparkles" class="w-5 h-5"></i>
             </div>
             <div>
@@ -36,18 +36,18 @@
             </div>
         </div>
         <div class="flex items-center gap-3">
-            <select id="qualityBatchSelect" class="rounded-lg border border-gray-300 focus:border-gray-500 focus:ring-0 px-4 py-2.5 text-sm">
+            <select id="qualityBatchSelect" class="rounded-lg border border-gray-300 focus:border-mint-500 focus:ring-0 px-4 py-2.5 text-sm">
                 <option value="">Select a batch...</option>
                 <?php foreach ($batches as $b): ?>
                 <option value="<?= $b['id'] ?>"><?= e($b['lot_id']) ?> — <?= e($b['product_name']) ?></option>
                 <?php endforeach; ?>
             </select>
-            <button type="button" onclick="predictQuality()" id="predictQualityBtn" class="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2.5 rounded-xl text-sm font-medium flex items-center gap-2 shadow-md hover:shadow-lg transition duration-200 whitespace-nowrap">
+            <button type="button" onclick="predictQuality()" id="predictQualityBtn" class="bg-mint-600 hover:bg-mint-700 text-white px-4 py-2.5 rounded-xl text-sm font-medium flex items-center gap-2 shadow-md hover:shadow-lg transition duration-200 whitespace-nowrap">
                 <i data-lucide="sparkles" class="w-4 h-4"></i> Predict Grade
             </button>
         </div>
     </div>
-    <div id="qualityPredictionResult" class="hidden mt-4 pt-4 border-t border-amber-200"></div>
+    <div id="qualityPredictionResult" class="hidden mt-4 pt-4 border-t border-slate-200"></div>
 </div>
 
 <!-- Quality Table -->
@@ -157,10 +157,10 @@ function predictQuality() {
     btn.disabled = true;
     btn.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Predicting...';
     result.classList.remove('hidden');
-    result.innerHTML = '<div class="text-center py-4"><i data-lucide="loader-2" class="w-6 h-6 mx-auto mb-2 text-amber-400 animate-spin"></i><p class="text-sm text-slate-500">Analyzing environmental data with AI...</p></div>';
+    result.innerHTML = '<div class="text-center py-4"><i data-lucide="loader-2" class="w-6 h-6 mx-auto mb-2 text-slate-400 animate-spin"></i><p class="text-sm text-slate-500">Analyzing environmental data with AI...</p></div>';
     lucide.createIcons();
 
-    const csrf = document.querySelector('input[name="csrf_token"]')?.value;
+    const csrf = document.querySelector('meta[name="csrf-token"]')?.content || document.querySelector('input[name="csrf_token"]')?.value;
 
     fetch('<?= url("ai/quality/") ?>' + batchId, {
         method: 'POST',
@@ -170,17 +170,15 @@ function predictQuality() {
     .then(r => r.json())
     .then(data => {
         if (data.error) {
-            result.innerHTML = '<div class="p-3 rounded-xl bg-red-50 border border-red-200 text-sm text-red-700 flex items-center gap-2"><i data-lucide="alert-circle" class="w-4 h-4"></i> ' + data.error + '</div>';
+            result.innerHTML = '<div class="p-3 rounded-xl bg-slate-50 border border-slate-200 text-sm text-slate-600 flex items-center gap-2"><i data-lucide="alert-circle" class="w-4 h-4"></i> ' + data.error + '</div>';
         } else {
             const p = data.prediction;
-            const gradeColors = { 'Excellent': 'green', 'Good': 'emerald', 'Fair': 'amber', 'Poor': 'red' };
-            const color = gradeColors[p.predicted_grade] || 'slate';
 
             result.innerHTML = `
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div class="p-4 rounded-xl bg-${color}-50 border border-${color}-200">
+                    <div class="p-4 rounded-xl bg-mint-50 border border-mint-200">
                         <p class="text-xs text-slate-500 font-medium">Predicted Grade</p>
-                        <p class="text-xl font-bold text-${color}-700 mt-1">${p.predicted_grade || 'N/A'}</p>
+                        <p class="text-xl font-bold text-mint-700 mt-1">${p.predicted_grade || 'N/A'}</p>
                     </div>
                     <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
                         <p class="text-xs text-slate-500 font-medium">Confidence</p>
@@ -199,7 +197,7 @@ function predictQuality() {
         lucide.createIcons();
     })
     .catch(() => {
-        result.innerHTML = '<div class="p-3 rounded-xl bg-red-50 border border-red-200 text-sm text-red-700">Request failed.</div>';
+        result.innerHTML = '<div class="p-3 rounded-xl bg-slate-50 border border-slate-200 text-sm text-slate-600">Request failed.</div>';
         lucide.createIcons();
     })
     .finally(() => {
