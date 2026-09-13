@@ -46,9 +46,13 @@
                 <tr class="hover:bg-slate-50 transition duration-150 group">
                     <td class="px-6 py-4">
                         <div class="flex items-center gap-2.5">
-                            <div class="h-8 w-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500">
-                                <i data-lucide="user" class="w-4 h-4"></i>
+                            <?php if (!empty($u['profile_photo'])): ?>
+                            <img src="<?= url($u['profile_photo']) ?>" alt="<?= e($u['name']) ?>" class="h-8 w-8 rounded-full object-cover border border-slate-200">
+                            <?php else: ?>
+                            <div class="h-8 w-8 rounded-full bg-mint-100 border border-mint-200 flex items-center justify-center text-mint-700 font-semibold text-xs">
+                                <?= strtoupper(substr($u['name'], 0, 1)) ?>
                             </div>
+                            <?php endif; ?>
                             <span class="font-medium text-slate-800"><?= e($u['name']) ?></span>
                         </div>
                     </td>

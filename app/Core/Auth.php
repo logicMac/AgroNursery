@@ -38,6 +38,7 @@ class Auth
             'name' => $user['name'],
             'email' => $user['email'],
             'role' => $role['name'] ?? 'staff',
+            'profile_photo' => $user['profile_photo'] ?? null,
             'permissions' => json_decode($role['permissions'] ?? '{}', true),
         ];
         $this->userModel->updateLastLogin($user['id']);

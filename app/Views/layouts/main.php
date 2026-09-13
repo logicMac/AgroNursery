@@ -222,7 +222,16 @@
                     <span class="text-xs font-medium px-2.5 py-1 rounded-full <?= ($_SESSION['user']['role'] ?? '') === 'owner' ? 'bg-mint-100 text-mint-800' : 'bg-slate-100 text-slate-700' ?>">
                         <?= ucfirst(e($_SESSION['user']['role'] ?? 'user')) ?>
                     </span>
-                    <span class="text-sm hidden sm:inline"><?= e($_SESSION['user']['name'] ?? '') ?></span>
+                    <a href="<?= url('profile') ?>" class="flex items-center gap-2.5 group">
+                        <?php if (!empty($_SESSION['user']['profile_photo'])): ?>
+                        <img src="<?= url($_SESSION['user']['profile_photo']) ?>" alt="<?= e($_SESSION['user']['name'] ?? '') ?>" class="h-9 w-9 rounded-full object-cover border-2 border-mint-200 shadow-sm group-hover:border-mint-400 transition duration-200">
+                        <?php else: ?>
+                        <div class="h-9 w-9 rounded-full bg-mint-100 border-2 border-mint-200 flex items-center justify-center text-mint-700 font-semibold text-sm group-hover:border-mint-400 transition duration-200">
+                            <?= strtoupper(substr($_SESSION['user']['name'] ?? 'U', 0, 1)) ?>
+                        </div>
+                        <?php endif; ?>
+                        <span class="text-sm hidden sm:inline text-slate-700 font-medium group-hover:text-mint-700 transition duration-200"><?= e($_SESSION['user']['name'] ?? '') ?></span>
+                    </a>
                     <form action="<?= url('logout') ?>" method="POST" class="inline">
                         <?= \App\Core\Csrf::field() ?>
                         <button class="text-slate-500 hover:text-red-600"><i data-lucide="log-out" class="w-4 h-4"></i></button>

@@ -65,8 +65,14 @@ $router->get('settings', 'SettingsController@index');
 $router->post('settings/update', 'SettingsController@update');
 $router->post('settings/test', 'SettingsController@test');
 
+$router->get('profile', 'UsersController@profile');
+$router->post('profile/update', 'UsersController@updateProfile');
+
 // AI feature endpoints
 $router->post('ai/shrinkage/{id}', 'AIController@shrinkageRisk');
 $router->post('ai/quality/{id}', 'AIController@qualityGrade');
 $router->post('ai/pricing/{id}', 'AIController@dynamicPrice');
 $router->post('ai/forecast/{id}', 'AIController@forecastDate');
+
+// Chatbot
+$router->post('chatbot/send', 'ChatbotController@send');

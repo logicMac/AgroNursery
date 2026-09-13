@@ -18,7 +18,7 @@ class User extends Model
 
     public function all(): array
     {
-        return $this->fetchAll('SELECT u.id, u.name, u.email, u.is_active, u.last_login, r.name as role_name FROM users u JOIN roles r ON u.role_id = r.id ORDER BY u.name');
+        return $this->fetchAll('SELECT u.id, u.name, u.email, u.is_active, u.last_login, u.profile_photo, r.name as role_name FROM users u JOIN roles r ON u.role_id = r.id ORDER BY u.name');
     }
 
     public function create(array $data): int
