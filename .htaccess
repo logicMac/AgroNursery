@@ -1,0 +1,9 @@
+RewriteEngine On
+RewriteBase /Agro/
+
+# Block direct access to app, config, database directories
+RewriteRule ^(app|config|database)/ - [F,L]
+
+# Do not rewrite if already inside public
+RewriteCond %{REQUEST_URI} !^/Agro/public/
+RewriteRule ^(.*)$ public/$1 [R=301,L]

@@ -1,0 +1,41 @@
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #f0fdf4;
+}
+::-webkit-scrollbar-thumb {
+    background: #86efac;
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #22c55e;
+}
+
+/* Subtle page background pattern */
+body {
+    background-color: #f8fafc;
+}
+
+/* Table polish */
+table.w-full th {
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+/* Button and link hover lift */
+button, a {
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+button:active, a:active {
+    transform: translateY(0);
+}
+
+/* Form inputs */
+input, select, textarea {
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}

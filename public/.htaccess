@@ -1,0 +1,10 @@
+RewriteEngine On
+RewriteBase /Agro/public/
+
+# Block direct access to app, config, database directories
+RewriteRule ^(app|config|database)/ - [F,L]
+
+# Route all non-file, non-directory requests to index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php [QSA,L]
